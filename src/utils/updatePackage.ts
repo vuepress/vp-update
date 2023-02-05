@@ -11,7 +11,7 @@ export const updatePackages = async (
   await Promise.all(
     Object.keys(dependencies).map(async (dependency) => {
       if (VUE_RELATED_PACKAGES.includes(dependency)) {
-        dependencies[dependency] = await getVersion(dependency, "latest");
+        dependencies[dependency] = `^${await getVersion(dependency, "latest")}`;
       } else if (OFFICIAL_PACKAGES.includes(dependency)) {
         dependencies[dependency] = await getVersion(dependency, "next");
       } else if (OFFICIAL_PLUGINS.includes(dependency)) {
