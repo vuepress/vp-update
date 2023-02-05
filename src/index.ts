@@ -17,7 +17,9 @@ cli
     const packageJSON = resolve(dir, "package.json");
 
     if (!existsSync(packageJSON))
-      return new Error(`No package.json found in ${targetDir}`);
+      return new Error(
+        `No package.json found in ${targetDir || "current dir"}`
+      );
 
     const packageManager = detectPackageManager();
 
