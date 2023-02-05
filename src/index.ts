@@ -12,7 +12,7 @@ cli
   .command("[dir]", "Update VuePress project")
   .usage("pnpm dlx vp-update [dir] / npx vp-update [dir]")
   .example("docs")
-  .action(async (targetDir: string) => {
+  .action(async (targetDir = "") => {
     const dir = resolve(process.cwd(), targetDir);
     const packageJSON = resolve(dir, "package.json");
 
