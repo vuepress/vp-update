@@ -1,0 +1,42 @@
+{
+  "name": "vp-update",
+  "version": "0.0.1",
+  "description": "Update helper for VuePress2",
+  "keywords": [
+    "update",
+    "vuepress",
+    "vuepress2"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Mr.Hope",
+    "email": "mister-hope@outlook.com",
+    "url": "https://mrhope.site"
+  },
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "vp-update": "./lib/index.js"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "rollup -c rollup.config.ts --configPlugin esbuild"
+  },
+  "dependencies": {
+    "cac": "6.7.14",
+    "execa": "6.1.0",
+    "inquirer": "9.1.4",
+    "semver": "7.3.8"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.3",
+    "@types/semver": "^7.3.13",
+    "esbuild": "^0.17.5",
+    "rollup": "^3.14.0",
+    "rollup-plugin-esbuild": "^5.0.0"
+  }
+}
