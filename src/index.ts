@@ -26,8 +26,12 @@ cli
     const packageJSONContent = JSON.parse(content);
 
     await Promise.all([
-      updatePackages(packageJSONContent.dependencies),
-      updatePackages(packageJSONContent.devDependencies),
+      packageJSONContent.dependencies
+        ? updatePackages(packageJSONContent.dependencies)
+        : Promise.resolve(),
+      packageJSONContent.devDependencies
+        ? updatePackages(packageJSONContent.devDependencies)
+        : Promise.resolve(),
     ]);
 
     writeFileSync(
