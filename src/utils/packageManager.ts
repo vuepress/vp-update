@@ -114,4 +114,6 @@ export const detectPackageManager = (
 };
 
 export const getRegistry = (): string =>
-  execaCommandSync(`${detectPackageManager()} config get registry`).stdout;
+  execaCommandSync(
+    `${detectPackageManager()} config get registry`
+  ).stdout.replace(/\/?$/, "/");
