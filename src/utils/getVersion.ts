@@ -39,9 +39,9 @@ export const getVersion = async (
         ? latest
         : tag === "next"
         ? next
-        : semver.gt(latest, next)
-        ? latest
-        : next;
+        : next && semver.gt(next, latest)
+        ? next
+        : latest;
     }
   }
 
