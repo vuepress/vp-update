@@ -24,7 +24,8 @@
     "lib"
   ],
   "scripts": {
-    "build": "rollup -c rollup.config.ts --configPlugin esbuild"
+    "build": "rollup -c rollup.config.ts --configPlugin esbuild",
+    "prepublish": "pnpm build"
   },
   "dependencies": {
     "cac": "6.7.14",
