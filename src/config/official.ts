@@ -48,3 +48,7 @@ export const OFFICIAL_PLUGINS = [
   "@vuepress/plugin-theme-data",
   "@vuepress/plugin-toc",
 ];
+
+export const THIRD_PARTY_PLUGINS = /^(@.*\/)?vuepress-plugin-/;
+
+export const THIRD_PARTY_THEMES = /^(@.*\/)?vuepress-theme-/;

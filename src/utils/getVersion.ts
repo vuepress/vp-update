@@ -8,10 +8,11 @@ export const getVersion = async (
   retries = 3
 ): Promise<string> => {
   const registry = getRegistry();
+  const infoUrl = `${registry}-/package/${packageName}/dist-tags`;
 
   const getVersionInfo = (): Promise<Record<string, string>> =>
     new Promise((resolve, reject) => {
-      get(`${registry}-/package/${packageName}/dist-tags`, (res) => {
+      get(infoUrl, (res) => {
         if (res.statusCode === 200) {
           let body = "";
 
@@ -22,12 +23,12 @@ export const getVersion = async (
         } else {
           reject();
         }
-      }).on("error", (err) => {
-        reject(err);
-      });
+      }).on("error", reject);
     });
 
-  for (let times = 1; times <= retries; times++) {
+  let times = 1;
+
+  do {
     const versionInfo = await getVersionInfo().catch(() => {
       console.log(`Get ${packageName} version failed, [${times}/${retries}]`);
     });
@@ -43,7 +44,11 @@ export const getVersion = async (
         ? next
         : latest;
     }
-  }
 
-  throw new Error(`Get ${packageName} version failed!`);
+    times++;
+  } while (times <= retries);
+
+  throw new Error(
+    `Failed to get ${packageName} version!\n Can not get version info from ${infoUrl}`
+  );
 };
