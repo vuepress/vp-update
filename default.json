@@ -1,0 +1,10 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "matchSourceUrls": ["https://github.com/vuepress/vuepress-next"],
+      "groupName": "vuepress monorepo",
+      "matchUpdateTypes": ["digest", "patch", "minor", "major"]
+    }
+  ]
+}
