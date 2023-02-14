@@ -4,7 +4,8 @@
     {
       "matchSourceUrls": ["https://github.com/vuepress/vuepress-next"],
       "groupName": "vuepress monorepo",
-      "matchUpdateTypes": ["digest", "patch", "minor", "major"]
+      "matchUpdateTypes": ["digest", "patch", "minor", "major"],
+      "matchCurrentValue": "/^2\\.\\d+\\.\\d+(?:(?:beta|rc)-\\d+)?$/"
     }
   ]
 }
