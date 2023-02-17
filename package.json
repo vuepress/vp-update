@@ -28,16 +28,17 @@
     "prepublish": "pnpm build"
   },
   "dependencies": {
-    "cac": "6.7.14",
-    "execa": "6.1.0",
-    "inquirer": "9.1.4",
-    "semver": "7.3.8"
+    "cac": "^6.7.14",
+    "execa": "^7.0.0",
+    "inquirer": "^9.1.4",
+    "semver": "^7.3.8"
   },
   "devDependencies": {
-    "@types/inquirer": "^9.0.3",
-    "@types/semver": "^7.3.13",
-    "esbuild": "^0.17.5",
-    "rollup": "^3.14.0",
-    "rollup-plugin-esbuild": "^5.0.0"
-  }
+    "@types/inquirer": "9.0.3",
+    "@types/semver": "7.3.13",
+    "esbuild": "0.17.8",
+    "rollup": "3.15.0",
+    "rollup-plugin-esbuild": "5.0.0"
+  },
+  "packageManager": "pnpm@7.27.0"
 }
