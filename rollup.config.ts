@@ -1,4 +1,5 @@
 import esbuild from "rollup-plugin-esbuild";
+import { shebangPlugin } from "./plugins/shebang.js";
 
 export default {
   input: `./src/index.ts`,
@@ -11,6 +12,7 @@ export default {
     },
   ],
   plugins: [
+    shebangPlugin(),
     // FIXME: This is an issue of ts NodeNext
     (esbuild as unknown as typeof esbuild.default)({
       charset: "utf8",
@@ -27,7 +29,5 @@ export default {
     "execa",
     "semver",
   ],
-  treeshake: {
-    unknownGlobalSideEffects: false,
-  },
+  treeshake: "smallest",
 };
