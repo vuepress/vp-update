@@ -5,7 +5,11 @@ import { cac } from "cac";
 import { execaCommandSync } from "execa";
 
 import { version } from "./config/index.js";
-import { detectPackageManager, updatePackages } from "./utils/index.js";
+import {
+  checkRegistry,
+  detectPackageManager,
+  updatePackages,
+} from "./utils/index.js";
 
 const cli = cac("vp-update");
 
@@ -24,6 +28,8 @@ cli
       );
 
     const packageManager = detectPackageManager();
+
+    checkRegistry(packageManager);
 
     const content = readFileSync(packageJSON, { encoding: "utf-8" });
 
