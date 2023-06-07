@@ -1,6 +1,7 @@
 {
   "name": "vp-update",
   "version": "0.1.2",
+  "type": "module",
   "description": "Update helper for VuePress2",
   "keywords": [
     "update",
@@ -13,33 +14,35 @@
     "email": "mister-hope@outlook.com",
     "url": "https://mrhope.site"
   },
-  "type": "module",
-  "exports": {
-    "./package.json": "./package.json"
-  },
   "bin": {
     "vp-update": "./lib/index.js"
+  },
+  "exports": {
+    "./package.json": "./package.json"
   },
   "files": [
     "lib"
   ],
+  "engines": {
+    "node": ">= 16"
+  },
   "scripts": {
     "build": "rollup -c rollup.config.ts --configPlugin esbuild",
-    "prepublish": "pnpm build"
+    "prepublishOnly": "pnpm build"
   },
+  "packageManager": "pnpm@8.6.1",
   "dependencies": {
     "cac": "^6.7.14",
-    "execa": "^7.0.0",
-    "inquirer": "^9.1.4",
-    "semver": "^7.3.8"
+    "execa": "^7.1.1",
+    "inquirer": "^9.2.7",
+    "semver": "^7.5.1"
   },
   "devDependencies": {
     "@types/inquirer": "9.0.3",
-    "@types/semver": "7.3.13",
-    "esbuild": "0.17.8",
-    "magic-string": "0.29.0",
-    "rollup": "3.15.0",
+    "@types/semver": "7.5.0",
+    "esbuild": "0.17.19",
+    "magic-string": "0.30.0",
+    "rollup": "3.24.0",
     "rollup-plugin-esbuild": "5.0.0"
-  },
-  "packageManager": "pnpm@7.27.0"
+  }
 }
