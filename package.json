@@ -12,7 +12,7 @@
   "author": {
     "name": "Mr.Hope",
     "email": "mister-hope@outlook.com",
-    "url": "https://mrhope.site"
+    "url": "https://mister-hope.com"
   },
   "bin": {
     "vp-update": "./lib/index.js"
@@ -33,16 +33,16 @@
   "packageManager": "pnpm@8.6.1",
   "dependencies": {
     "cac": "^6.7.14",
-    "execa": "^7.1.1",
-    "inquirer": "^9.2.7",
-    "semver": "^7.5.1"
+    "execa": "^8.0.1",
+    "inquirer": "^9.2.11",
+    "semver": "^7.5.4"
   },
   "devDependencies": {
-    "@types/inquirer": "9.0.3",
-    "@types/semver": "7.5.0",
-    "esbuild": "0.17.19",
-    "magic-string": "0.30.0",
-    "rollup": "3.24.0",
-    "rollup-plugin-esbuild": "5.0.0"
+    "@types/inquirer": "9.0.4",
+    "@types/semver": "7.5.3",
+    "esbuild": "0.19.4",
+    "magic-string": "0.30.4",
+    "rollup": "4.0.2",
+    "rollup-plugin-esbuild": "6.1.0"
   }
 }

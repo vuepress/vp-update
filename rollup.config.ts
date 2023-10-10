@@ -13,11 +13,10 @@ export default {
   ],
   plugins: [
     shebangPlugin(),
-    // FIXME: This is an issue of ts NodeNext
-    (esbuild as unknown as typeof esbuild.default)({
+    esbuild({
       charset: "utf8",
       minify: true,
-      target: "node14",
+      target: "node18",
     }),
   ],
   external: [
