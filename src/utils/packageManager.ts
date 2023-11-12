@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { execaCommandSync } from "execa";
 
-export type PackageManager = "npm" | "yarn" | "pnpm";
+export type PackageManager = "npm" | "yarn" | "yarn1" | "pnpm";
 
 const globalCache = new Map<string, boolean>();
 const localCache = new Map<string, PackageManager>();
@@ -13,7 +13,12 @@ const PNPM_LOCK = "pnpm-lock.yaml";
 
 const isInstalled = (packageManager: PackageManager): boolean => {
   try {
-    return execaCommandSync(`${packageManager} --version`).exitCode === 0;
+    const bin = packageManager === "yarn1" ? "yarn" : packageManager;
+    const excute = execaCommandSync(`${bin} --version`);
+
+    if (packageManager === "yarn1") return excute.stdout.startsWith("1");
+
+    return excute.exitCode === 0;
   } catch (e) {
     return false;
   }
@@ -57,9 +62,15 @@ export const getTypeofLockFile = (
   }
 
   if (existsSync(resolve(cwd, YARN_LOCK))) {
-    localCache.set(key, "yarn");
+    const packageManager = fs
+      .readFileSync(resolve(cwd, YARN_LOCK), { encoding: "utf-8" })
+      .includes("yarn lockfile v1")
+      ? "yarn1"
+      : "yarn";
 
-    return "yarn";
+    localCache.set(key, packageManager);
+
+    return packageManager;
   }
 
   if (existsSync(resolve(cwd, NPM_LOCK))) {
@@ -81,9 +92,15 @@ export const getTypeofLockFile = (
       }
 
       if (existsSync(resolve(dir, YARN_LOCK))) {
-        localCache.set(key, "yarn");
+        const packageManager = fs
+          .readFileSync(resolve(dir, YARN_LOCK), { encoding: "utf-8" })
+          .includes("yarn lockfile v1")
+          ? "yarn1"
+          : "yarn";
 
-        return "yarn";
+        localCache.set(key, packageManager);
+
+        return packageManager;
       }
 
       if (existsSync(resolve(dir, NPM_LOCK))) {
@@ -112,8 +129,3 @@ export const detectPackageManager = (
       : "npm")
   );
 };
-
-export const getRegistry = (): string =>
-  execaCommandSync(
-    `${detectPackageManager()} config get registry`
-  ).stdout.replace(/\/?$/, "/");

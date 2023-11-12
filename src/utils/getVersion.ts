@@ -1,6 +1,6 @@
 import { get } from "node:https";
 import semver from "semver";
-import { getRegistry } from "./packageManager.js";
+import { getRegistry } from "./registry.js";
 
 export const getVersion = async (
   packageName: string,

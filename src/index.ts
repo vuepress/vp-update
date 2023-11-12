@@ -6,7 +6,7 @@ import { execaCommandSync } from "execa";
 
 import { version } from "./config/index.js";
 import {
-  checkRegistry,
+  checkTaobaoRegistry,
   detectPackageManager,
   updatePackages,
 } from "./utils/index.js";
@@ -29,7 +29,7 @@ cli
 
     const packageManager = detectPackageManager();
 
-    checkRegistry(packageManager);
+    checkTaobaoRegistry(packageManager);
 
     const content = readFileSync(packageJSON, { encoding: "utf-8" });
 
@@ -54,12 +54,10 @@ cli
     const updateCommand =
       packageManager === "pnpm"
         ? `pnpm update`
+        : packageManager === "yarn1"
+        ? `yarn upgrade`
         : packageManager === "yarn"
-        ? execaCommandSync(`${packageManager} --version`).stdout.startsWith(
-            "1."
-          )
-          ? `yarn upgrade`
-          : `yarn up`
+        ? `yarn up`
         : `npm update`;
 
     execaCommandSync(updateCommand, { stdout: "inherit" });
