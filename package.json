@@ -24,25 +24,25 @@
     "lib"
   ],
   "engines": {
-    "node": ">= 16"
+    "node": ">= 18"
   },
   "scripts": {
     "build": "rollup -c rollup.config.ts --configPlugin esbuild",
     "prepublishOnly": "pnpm build"
   },
-  "packageManager": "pnpm@8.6.1",
+  "packageManager": "pnpm@8.10.3",
   "dependencies": {
     "cac": "^6.7.14",
     "execa": "^8.0.1",
-    "inquirer": "^9.2.11",
+    "inquirer": "^9.2.12",
     "semver": "^7.5.4"
   },
   "devDependencies": {
-    "@types/inquirer": "9.0.4",
-    "@types/semver": "7.5.3",
-    "esbuild": "0.19.4",
-    "magic-string": "0.30.4",
-    "rollup": "4.0.2",
+    "@types/inquirer": "9.0.7",
+    "@types/semver": "7.5.5",
+    "esbuild": "0.19.5",
+    "magic-string": "0.30.5",
+    "rollup": "4.4.0",
     "rollup-plugin-esbuild": "6.1.0"
   }
 }
