@@ -1,5 +1,6 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
+
 import { execaCommandSync } from "execa";
 
 export type PackageManager = "npm" | "yarn" | "yarn1" | "pnpm";
@@ -62,9 +63,9 @@ export const getTypeofLockFile = (
   }
 
   if (existsSync(resolve(cwd, YARN_LOCK))) {
-    const packageManager = fs
-      .readFileSync(resolve(cwd, YARN_LOCK), { encoding: "utf-8" })
-      .includes("yarn lockfile v1")
+    const packageManager = readFileSync(resolve(cwd, YARN_LOCK), {
+      encoding: "utf-8",
+    }).includes("yarn lockfile v1")
       ? "yarn1"
       : "yarn";
 
@@ -92,9 +93,9 @@ export const getTypeofLockFile = (
       }
 
       if (existsSync(resolve(dir, YARN_LOCK))) {
-        const packageManager = fs
-          .readFileSync(resolve(dir, YARN_LOCK), { encoding: "utf-8" })
-          .includes("yarn lockfile v1")
+        const packageManager = readFileSync(resolve(dir, YARN_LOCK), {
+          encoding: "utf-8",
+        }).includes("yarn lockfile v1")
           ? "yarn1"
           : "yarn";
 

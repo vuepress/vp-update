@@ -1,13 +1,17 @@
 import { get } from "node:https";
+
 import semver from "semver";
+
 import { getRegistry } from "./registry.js";
+import { type PackageManager } from "./packageManager.js";
 
 export const getVersion = async (
+  packageManager: PackageManager,
   packageName: string,
   tag: "latest" | "next" | "auto" = "auto",
   retries = 3
 ): Promise<string> => {
-  const registry = getRegistry();
+  const registry = getRegistry(packageManager);
   const infoUrl = `${registry}-/package/${packageName}/dist-tags`;
 
   const getVersionInfo = (): Promise<Record<string, string>> =>

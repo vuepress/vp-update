@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+
 import { cac } from "cac";
 import { execaCommandSync } from "execa";
 
@@ -37,10 +38,10 @@ cli
 
     await Promise.all([
       packageJSONContent.dependencies
-        ? updatePackages(packageJSONContent.dependencies)
+        ? updatePackages(packageManager, packageJSONContent.dependencies)
         : Promise.resolve(),
       packageJSONContent.devDependencies
-        ? updatePackages(packageJSONContent.devDependencies)
+        ? updatePackages(packageManager, packageJSONContent.devDependencies)
         : Promise.resolve(),
     ]);
 

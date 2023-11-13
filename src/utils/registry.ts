@@ -26,10 +26,7 @@ export const checkTaobaoRegistry = (packageManager: PackageManager): void => {
       "npm.taobao.org is no longer available, resetting it to npmmirror.com"
     );
 
-    if (
-      packageManager === "yarn" &&
-      !execaCommandSync(`${packageManager} --version`).stdout.startsWith("1")
-    ) {
+    if (packageManager === "yarn") {
       execaCommandSync(
         `${packageManager} config set npmRegistryServer  ${NPM_MIRROR_REGISTRY}`
       );
