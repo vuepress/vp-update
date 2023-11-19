@@ -13,6 +13,19 @@ export const getRegistry = (packageManager: PackageManager): string => {
       `${packageManager} config get npmRegistryServer`
     ).stdout.replace(/\/?$/, "/");
 
+  if (
+    packageManager === "bun" &&
+    !execaCommandSync(`${packageManager} --version`).exitCode
+  ) {
+    console.warn(
+      "bun does not support get registry at the time, using npm global registry instead"
+    );
+    return execaCommandSync(
+      // TODO: wait for bun to support get registry config
+      `npm config get registry`
+    ).stdout.replace(/\/?$/, "/");
+  }
+
   return execaCommandSync(
     `${packageManager} config get registry`
   ).stdout.replace(/\/?$/, "/");
@@ -30,6 +43,8 @@ export const checkTaobaoRegistry = (packageManager: PackageManager): void => {
       execaCommandSync(
         `${packageManager} config set npmRegistryServer  ${NPM_MIRROR_REGISTRY}`
       );
+    } else if (packageManager === "bun") {
+      execaCommandSync(`npm config set registry ${NPM_MIRROR_REGISTRY}`);
     } else {
       execaCommandSync(
         `${packageManager} config set registry ${NPM_MIRROR_REGISTRY}`

@@ -3,13 +3,14 @@ import { dirname, resolve } from "node:path";
 
 import { execaCommandSync } from "execa";
 
-export type PackageManager = "npm" | "yarn" | "yarn1" | "pnpm";
+export type PackageManager = "npm" | "yarn" | "yarn1" | "pnpm" | "bun";
 
 const globalCache = new Map<string, boolean>();
 const localCache = new Map<string, PackageManager>();
 
 const NPM_LOCK = "package-lock.json";
 const YARN_LOCK = "yarn.lock";
+const BUN_LOCK = "bun.lockb";
 const PNPM_LOCK = "pnpm-lock.yaml";
 
 const isInstalled = (packageManager: PackageManager): boolean => {
@@ -74,6 +75,12 @@ export const getTypeofLockFile = (
     return packageManager;
   }
 
+  if (existsSync(resolve(cwd, BUN_LOCK))) {
+    localCache.set(key, "bun");
+
+    return "bun";
+  }
+
   if (existsSync(resolve(cwd, NPM_LOCK))) {
     localCache.set(key, "npm");
 
@@ -104,6 +111,12 @@ export const getTypeofLockFile = (
         return packageManager;
       }
 
+      if (existsSync(resolve(dir, BUN_LOCK))) {
+        localCache.set(key, "bun");
+
+        return "bun";
+      }
+
       if (existsSync(resolve(dir, NPM_LOCK))) {
         localCache.set(key, "npm");
 
@@ -127,6 +140,8 @@ export const detectPackageManager = (
       ? "pnpm"
       : hasGlobalInstallation("yarn")
       ? "yarn"
+      : hasGlobalInstallation("bun")
+      ? "bun"
       : "npm")
   );
 };

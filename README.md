@@ -19,3 +19,9 @@ For pnpm:
 ```bash
 pnpm dlx vp-update
 ```
+
+For bun:
+
+```bash
+bunx vp-update
+```

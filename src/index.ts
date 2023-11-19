@@ -16,7 +16,9 @@ const cli = cac("vp-update");
 
 cli
   .command("[dir]", "Update VuePress project")
-  .usage("pnpm dlx vp-update [dir] / npx vp-update [dir]")
+  .usage(
+    "pnpm dlx vp-update [dir] / npx vp-update [dir] / bunx vp-update [dir]"
+  )
   .example("docs")
   .action(async (targetDir = "") => {
     console.log("Upgrading current project...");
@@ -59,6 +61,8 @@ cli
         ? `yarn upgrade`
         : packageManager === "yarn"
         ? `yarn up`
+        : packageManager === "bun"
+        ? `bun update`
         : `npm update`;
 
     execaCommandSync(updateCommand, { stdout: "inherit" });
@@ -68,7 +72,8 @@ cli
 
 cli.help(() => [
   {
-    title: "pnpm dlx vp-update [dir] / npx vp-update [dir]",
+    title:
+      "pnpm dlx vp-update [dir] / npx vp-update [dir] / bunx vp-update [dir]",
     body: "Update VuePress project in [dir]",
   },
 ]);
