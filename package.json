@@ -30,7 +30,7 @@
     "build": "rollup -c rollup.config.ts --configPlugin esbuild",
     "prepublishOnly": "pnpm build"
   },
-  "packageManager": "pnpm@8.10.3",
+  "packageManager": "pnpm@8.10.5",
   "dependencies": {
     "cac": "^6.7.14",
     "execa": "^8.0.1",
@@ -39,10 +39,11 @@
   },
   "devDependencies": {
     "@types/inquirer": "9.0.7",
-    "@types/semver": "7.5.5",
-    "esbuild": "0.19.5",
+    "@types/semver": "7.5.6",
+    "esbuild": "0.19.7",
     "magic-string": "0.30.5",
-    "rollup": "4.4.0",
-    "rollup-plugin-esbuild": "6.1.0"
+    "rollup": "4.5.1",
+    "rollup-plugin-esbuild": "6.1.0",
+    "rollup-plugin-resolve-shebang": "1.0.1"
   }
 }

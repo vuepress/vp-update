@@ -1,5 +1,5 @@
 import esbuild from "rollup-plugin-esbuild";
-import { shebangPlugin } from "./plugins/shebang.js";
+import { shebang } from "rollup-plugin-resolve-shebang";
 
 export default {
   input: `./src/index.ts`,
@@ -12,7 +12,7 @@ export default {
     },
   ],
   plugins: [
-    shebangPlugin(),
+    shebang(),
     esbuild({
       charset: "utf8",
       minify: true,
