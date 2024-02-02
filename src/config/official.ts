@@ -17,36 +17,21 @@ export const VUE_RELATED_PACKAGES = [
 export const OFFICIAL_PACKAGES = [
   "@vuepress/bundler-vite",
   "@vuepress/bundler-webpack",
+  "vuepress",
+];
+
+export const OFFICIAL_PLUGINS_AND_THEMES_REGEXP =
+  /^@vuepress\/(?:plugin|theme)-/;
+
+export const REMOVED_PACKAGES = ["vuepress-webpack", "vuepress-vite"];
+
+export const DEPRECATED_PACKAGES = [
   "@vuepress/cli",
   "@vuepress/client",
   "@vuepress/core",
   "@vuepress/markdown",
   "@vuepress/shared",
   "@vuepress/utils",
-  "vuepress",
-  "vuepress-webpack",
-  "vuepress-vite",
-];
-
-export const OFFICIAL_PLUGINS = [
-  "@vuepress/plugin-active-header-links",
-  "@vuepress/plugin-back-to-top",
-  "@vuepress/plugin-container",
-  "@vuepress/plugin-docsearch",
-  "@vuepress/plugin-external-link-icon",
-  "@vuepress/plugin-git",
-  "@vuepress/plugin-google-analytics",
-  "@vuepress/plugin-medium-zoom",
-  "@vuepress/plugin-nprogress",
-  "@vuepress/plugin-palette",
-  "@vuepress/plugin-prismjs",
-  "@vuepress/plugin-pwa",
-  "@vuepress/plugin-pwa-popup",
-  "@vuepress/plugin-register-components",
-  "@vuepress/plugin-search",
-  "@vuepress/plugin-shiki",
-  "@vuepress/plugin-theme-data",
-  "@vuepress/plugin-toc",
 ];
 
 export const THIRD_PARTY_PLUGINS = /^(@.*\/)?vuepress-plugin-/;

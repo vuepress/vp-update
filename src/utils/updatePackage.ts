@@ -1,6 +1,8 @@
 import {
+  DEPRECATED_PACKAGES,
   OFFICIAL_PACKAGES,
-  OFFICIAL_PLUGINS,
+  OFFICIAL_PLUGINS_AND_THEMES_REGEXP,
+  REMOVED_PACKAGES,
   THIRD_PARTY_PLUGINS,
   THIRD_PARTY_THEMES,
   VUE_RELATED_PACKAGES,
@@ -14,7 +16,24 @@ export const updatePackages = async (
 ): Promise<void> => {
   await Promise.all(
     Object.keys(dependencies).map(async (dependency) => {
-      if (VUE_RELATED_PACKAGES.includes(dependency)) {
+      if (REMOVED_PACKAGES.includes(dependency)) {
+        console.error(
+          `Removing "${dependency}" from your dependencies, as it's no longer maintained.`
+        );
+        delete dependencies[dependency];
+      } else if (DEPRECATED_PACKAGES.includes(dependency)) {
+        console.error(
+          `"${dependency}"is deprecated, please remove it from your dependencies and import "${dependency.substring(
+            1
+          )}" from "vuepress" directly.`
+        );
+
+        dependencies[dependency] = `^${await getVersion(
+          packageManager,
+          dependency,
+          "next"
+        )}`;
+      } else if (VUE_RELATED_PACKAGES.includes(dependency)) {
         dependencies[dependency] = `^${await getVersion(
           packageManager,
           dependency,
@@ -26,7 +45,7 @@ export const updatePackages = async (
           dependency,
           "next"
         );
-      } else if (OFFICIAL_PLUGINS.includes(dependency)) {
+      } else if (OFFICIAL_PLUGINS_AND_THEMES_REGEXP.test(dependency)) {
         dependencies[dependency] = await getVersion(
           packageManager,
           dependency,
