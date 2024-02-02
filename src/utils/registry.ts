@@ -1,4 +1,4 @@
-import { execaCommandSync } from "execa";
+import { spawnSync } from "node:child_process";
 
 import { type PackageManager } from "./packageManager.js";
 
@@ -7,28 +7,39 @@ const NPM_MIRROR_REGISTRY = "https://registry.npmmirror.com/";
 export const getRegistry = (packageManager: PackageManager): string => {
   if (
     packageManager === "yarn" &&
-    !execaCommandSync(`${packageManager} --version`).stdout.startsWith("1")
+    !spawnSync(`${packageManager} --version`, {
+      shell: true,
+    })
+      .stdout.toString()
+      .startsWith("1")
   )
-    return execaCommandSync(
-      `${packageManager} config get npmRegistryServer`
-    ).stdout.replace(/\/?$/, "/");
+    return spawnSync(`${packageManager} config get npmRegistryServer`)
+      .stdout.toString()
+      .replace(/\/?$/, "/");
 
   if (
     packageManager === "bun" &&
-    !execaCommandSync(`${packageManager} --version`).exitCode
+    !spawnSync(`${packageManager} --version`, {
+      shell: true,
+    }).status
   ) {
     console.warn(
       "bun does not support get registry at the time, using npm global registry instead"
     );
-    return execaCommandSync(
+    return spawnSync(
       // TODO: wait for bun to support get registry config
-      `npm config get registry`
-    ).stdout.replace(/\/?$/, "/");
+      `npm config get registry`,
+      { shell: true }
+    )
+      .stdout.toString()
+      .replace(/\/?$/, "/");
   }
 
-  return execaCommandSync(
-    `${packageManager} config get registry`
-  ).stdout.replace(/\/?$/, "/");
+  return spawnSync(`${packageManager} config get registry`, {
+    shell: true,
+  })
+    .stdout.toString()
+    .replace(/\/?$/, "/");
 };
 
 export const checkTaobaoRegistry = (packageManager: PackageManager): void => {
@@ -40,14 +51,18 @@ export const checkTaobaoRegistry = (packageManager: PackageManager): void => {
     );
 
     if (packageManager === "yarn") {
-      execaCommandSync(
-        `${packageManager} config set npmRegistryServer  ${NPM_MIRROR_REGISTRY}`
+      spawnSync(
+        `${packageManager} config set npmRegistryServer  ${NPM_MIRROR_REGISTRY}`,
+        { shell: true }
       );
     } else if (packageManager === "bun") {
-      execaCommandSync(`npm config set registry ${NPM_MIRROR_REGISTRY}`);
+      spawnSync(`npm config set registry ${NPM_MIRROR_REGISTRY}`, {
+        shell: true,
+      });
     } else {
-      execaCommandSync(
-        `${packageManager} config set registry ${NPM_MIRROR_REGISTRY}`
+      spawnSync(
+        `${packageManager} config set registry ${NPM_MIRROR_REGISTRY}`,
+        { shell: true }
       );
     }
   }

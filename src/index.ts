@@ -3,12 +3,12 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { cac } from "cac";
-import { execaCommandSync } from "execa";
+import { spawnSync } from "node:child_process";
 
 import { version } from "./config/index.js";
 import {
   checkTaobaoRegistry,
-  detectPackageManager,
+  getPackageManager,
   updatePackages,
 } from "./utils/index.js";
 
@@ -21,7 +21,7 @@ cli
   )
   .example("docs")
   .action(async (targetDir = "") => {
-    console.log("Upgrading current project...");
+    console.log("Bumping deps...");
     const dir = resolve(process.cwd(), targetDir);
     const packageJSON = resolve(dir, "package.json");
 
@@ -30,7 +30,7 @@ cli
         `No package.json found in ${targetDir || "current dir"}`
       );
 
-    const packageManager = detectPackageManager();
+    const packageManager = getPackageManager();
 
     checkTaobaoRegistry(packageManager);
 
@@ -52,9 +52,16 @@ cli
       `${JSON.stringify(packageJSONContent, null, 2)}\n`
     );
 
-    execaCommandSync(`${packageManager} install`, { stdout: "inherit" });
+    console.log("Install deps...");
 
-    const updateCommand =
+    spawnSync(`${packageManager} install`, {
+      shell: true,
+      stdio: "inherit",
+    });
+
+    console.log("Upgrading deps...");
+
+    spawnSync(
       packageManager === "pnpm"
         ? `pnpm update`
         : packageManager === "yarn1"
@@ -63,9 +70,12 @@ cli
         ? `yarn up`
         : packageManager === "bun"
         ? `bun update`
-        : `npm update`;
-
-    execaCommandSync(updateCommand, { stdout: "inherit" });
+        : `npm update`,
+      {
+        shell: true,
+        stdio: "inherit",
+      }
+    );
 
     return;
   });

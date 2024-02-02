@@ -20,12 +20,12 @@ export default {
     }),
   ],
   external: [
+    "node:child_process",
     "node:fs",
     "node:https",
     "node:module",
     "node:path",
     "cac",
-    "execa",
     "semver",
   ],
   treeshake: "smallest",

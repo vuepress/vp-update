@@ -1,35 +1,42 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 
-import { execaCommandSync } from "execa";
+import { spawnSync } from "node:child_process";
 
 export type PackageManager = "npm" | "yarn" | "yarn1" | "pnpm" | "bun";
 
 const globalCache = new Map<string, boolean>();
 const localCache = new Map<string, PackageManager>();
 
+const PACKAGE_CONFIG = "package.json";
 const NPM_LOCK = "package-lock.json";
 const YARN_LOCK = "yarn.lock";
-const BUN_LOCK = "bun.lockb";
 const PNPM_LOCK = "pnpm-lock.yaml";
+const BUN_LOCK = "bun.lockb";
 
 const isInstalled = (packageManager: PackageManager): boolean => {
   try {
     const bin = packageManager === "yarn1" ? "yarn" : packageManager;
-    const excute = execaCommandSync(`${bin} --version`);
 
-    if (packageManager === "yarn1") return excute.stdout.startsWith("1");
+    const result = spawnSync(`${bin} --version`, {
+      shell: true,
+    });
 
-    return excute.exitCode === 0;
+    if (packageManager === "yarn1")
+      return result.stdout.toString().startsWith("1");
+
+    return result.status === 0;
   } catch (e) {
     return false;
   }
 };
 
 /**
- * Check if a global package manager is available
+ * Check if a package manager is installed globally.
+ *
+ * @param packageManager package manager
  */
-export const hasGlobalInstallation = (
+export const isPackageManagerInstalled = (
   packageManager: PackageManager
 ): boolean => {
   const key = `global:${packageManager}`;
@@ -47,6 +54,73 @@ export const hasGlobalInstallation = (
   return false;
 };
 
+/**
+ * Get package manager setting in package.json
+ *
+ * @param cwd current working directory
+ * @param deep whether to search in parent directories
+ * @returns the type of lock file
+ */
+export const getPackageManagerSetting = (
+  cwd = process.cwd(),
+  deep = true
+): PackageManager | null => {
+  const key = `package:${cwd}`;
+
+  const status = localCache.get(key);
+
+  if (status !== undefined) return status;
+
+  if (existsSync(resolve(cwd, PACKAGE_CONFIG))) {
+    const { packageManager: packageManagerSettings } = JSON.parse(
+      readFileSync(resolve(cwd, PACKAGE_CONFIG), "utf-8")
+    ) as Record<string, unknown> & { packageManager?: string };
+
+    if (packageManagerSettings) {
+      const packageManager = packageManagerSettings.split(
+        "@"
+      )[0] as PackageManager;
+
+      localCache.set(key, packageManager);
+
+      return packageManager;
+    }
+  }
+
+  if (deep) {
+    let dir = cwd;
+
+    while (dir !== dirname(dir)) {
+      dir = dirname(dir);
+
+      if (existsSync(resolve(cwd, PACKAGE_CONFIG))) {
+        const { packageManager: packageManagerSettings } = JSON.parse(
+          readFileSync(resolve(cwd, PACKAGE_CONFIG), "utf-8")
+        ) as Record<string, unknown> & { packageManager?: string };
+
+        if (packageManagerSettings) {
+          const packageManager = packageManagerSettings.split(
+            "@"
+          )[0] as PackageManager;
+
+          localCache.set(key, packageManager);
+
+          return packageManager;
+        }
+      }
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Get the type of lock file.
+ *
+ * @param cwd current working directory
+ * @param deep whether to search in parent directories
+ * @returns the type of lock file
+ */
 export const getTypeofLockFile = (
   cwd = process.cwd(),
   deep = true
@@ -128,20 +202,23 @@ export const getTypeofLockFile = (
   return null;
 };
 
-export const detectPackageManager = (
+/**
+ * Detect the package manager used in the current project.
+ *
+ * @param cwd current working directory
+ * @param deep whether to search in parent directories
+ * @returns the type of package manager
+ */
+export const getPackageManager = (
   cwd = process.cwd(),
-  deep = false
-): PackageManager => {
-  const type = getTypeofLockFile(cwd, deep);
-
-  return (
-    type ||
-    (hasGlobalInstallation("pnpm")
-      ? "pnpm"
-      : hasGlobalInstallation("yarn")
-      ? "yarn"
-      : hasGlobalInstallation("bun")
-      ? "bun"
-      : "npm")
-  );
-};
+  deep = true
+): PackageManager =>
+  getPackageManagerSetting(cwd, deep) ||
+  getTypeofLockFile(cwd, deep) ||
+  (isPackageManagerInstalled("pnpm")
+    ? "pnpm"
+    : isPackageManagerInstalled("yarn")
+    ? "yarn"
+    : isPackageManagerInstalled("bun")
+    ? "bun"
+    : "npm");
